@@ -1,5 +1,6 @@
 package com.apipeluqueria.API.peluqueria.controller;
 
+import com.apipeluqueria.API.peluqueria.encoder.PasswordEncoder;
 import com.apipeluqueria.API.peluqueria.entity.Empleado;
 import com.apipeluqueria.API.peluqueria.exception.EmpleadoNoEncontradoException;
 import com.apipeluqueria.API.peluqueria.service.EmpleadoService;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/empleados")
 public class EmpleadoController {
 
     private final EmpleadoService empleadoService;
@@ -36,7 +38,8 @@ public class EmpleadoController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Crear un empleado", description = "Crea un empleado nuevo")
-    public Empleado crear(Empleado empleado){
+    public Empleado crear(@RequestBody Empleado empleado){
+        empleado.setPassword(PasswordEncoder.encode(empleado.getPassword()));
         return empleadoService.save(empleado);
     }
 
@@ -48,6 +51,7 @@ public class EmpleadoController {
             throw new EmpleadoNoEncontradoException("No existe el empleado con id: " + id);
         }else{
             empleado.setId(id);
+            empleado.setPassword(PasswordEncoder.encode(empleado.getPassword()));
         }
         return empleadoService.save(empleado);
     }

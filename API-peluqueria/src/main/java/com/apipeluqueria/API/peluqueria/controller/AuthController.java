@@ -1,6 +1,7 @@
 package com.apipeluqueria.API.peluqueria.controller;
 
 import com.apipeluqueria.API.peluqueria.entity.Empleado;
+import com.apipeluqueria.API.peluqueria.exception.EmpleadoNoEncontradoException;
 import com.apipeluqueria.API.peluqueria.request.AuthenticationRequest;
 import com.apipeluqueria.API.peluqueria.response.AuthenticationResponse;
 import com.apipeluqueria.API.peluqueria.service.EmpleadoService;
@@ -26,7 +27,7 @@ public class AuthController {
     private UserDetailsService userDetailsService;
 
     @PostMapping("/auth")
-    public AuthenticationResponse createToken(@RequestBody AuthenticationRequest request) {
+    public AuthenticationResponse createToken(@RequestBody AuthenticationRequest request) throws EmpleadoNoEncontradoException {
         log.info("createToken(-)");
         // Authenticate the user
         userDetailsService.loadUserByUsername(request.getNombre());
@@ -35,6 +36,9 @@ public class AuthController {
         String jwtToken = jwtUtil.generateToken(request.getNombre());
 
         Empleado empleado = empleadoService.findByNombre(request.getNombre());
+        if(empleado.getPassword() != request.getPassword()){
+            throw new EmpleadoNoEncontradoException("Contraseña incorrecta");
+        }
         empleado.setToken(jwtToken);
         empleadoService.save(empleado);
         return new AuthenticationResponse(jwtToken);
