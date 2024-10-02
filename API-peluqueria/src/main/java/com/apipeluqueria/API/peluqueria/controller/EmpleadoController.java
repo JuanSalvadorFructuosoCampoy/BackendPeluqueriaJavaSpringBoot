@@ -66,7 +66,7 @@ public class EmpleadoController {
     @GetMapping("/nombre/{nombre}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Obtener un empleado por nombre", description = "Obtiene un empleado por nombre")
-    public Empleado porNombre(String nombre) throws EmpleadoNoEncontradoException {
+    public Empleado porNombre(@PathVariable String nombre) throws EmpleadoNoEncontradoException {
         return empleadoService.findByNombre(nombre);
     }
 }
