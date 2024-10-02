@@ -6,6 +6,7 @@ import com.apipeluqueria.API.peluqueria.request.AuthenticationRequest;
 import com.apipeluqueria.API.peluqueria.response.AuthenticationResponse;
 import com.apipeluqueria.API.peluqueria.service.EmpleadoService;
 import com.apipeluqueria.API.peluqueria.utility.JwtUtil;
+import com.apipeluqueria.API.peluqueria.encoder.PasswordEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,14 +32,20 @@ public class AuthController {
         log.info("createToken(-)");
         // Authenticate the user
         userDetailsService.loadUserByUsername(request.getNombre());
+        Empleado empleado = empleadoService.findByNombre(request.getNombre());
+        if(empleado == null){
+            throw new EmpleadoNoEncontradoException("Credenciales incorrectas");
+        }
+        //Codificamos la contraseña introducia para compararla con la de la base de datos
+        String encodedPassword = PasswordEncoder.encode(request.getPassword());
+
+        if(!empleado.getPassword().equals(encodedPassword)){
+            throw new EmpleadoNoEncontradoException("Credenciales incorrectas");
+        }
 
         // Generate the token
         String jwtToken = jwtUtil.generateToken(request.getNombre());
-
-        Empleado empleado = empleadoService.findByNombre(request.getNombre());
-        if(empleado.getPassword() != request.getPassword()){
-            throw new EmpleadoNoEncontradoException("Contraseña incorrecta");
-        }
+        //Guardar el token
         empleado.setToken(jwtToken);
         empleadoService.save(empleado);
         return new AuthenticationResponse(jwtToken);
