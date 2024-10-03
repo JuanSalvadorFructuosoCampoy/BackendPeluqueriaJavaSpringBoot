@@ -37,9 +37,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     @Override
     @Transactional
     public Empleado save(Empleado empleado) {
-        if(empleado.getId() == null){
-            return empleadoRepository.save(empleado);
-        } else {
+        if(empleado.getId() != null){
             Empleado empleadoDatabase = empleadoRepository.findById(empleado.getId()).get();
             if(empleado.getPassword() == null) {
                 empleado.setPassword(empleadoDatabase.getPassword());
