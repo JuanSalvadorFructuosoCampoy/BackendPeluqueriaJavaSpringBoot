@@ -40,7 +40,26 @@ public class ProductoController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Crear un producto", description = "Crea un producto nuevo")
     public Producto crear(@RequestBody Producto producto){
-
         return productoService.save(producto);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Editar un producto por ID", description = "Edita un producto por ID")
+    public Producto editar(@PathVariable String id, @RequestBody Producto producto) throws ProductoNoEncontradoException {
+        if(productoService.porId(id).isEmpty()) {
+            throw new ProductoNoEncontradoException("No existe el producto con id: " + id);
+        }else{
+            producto.setId(id);
+            System.out.println(producto);
+        }
+        return productoService.save(producto);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Eliminar un producto por ID", description = "Elimina un producto por ID")
+    public void eliminar(@PathVariable String id) throws ProductoNoEncontradoException {
+        productoService.eliminar(id);
     }
 }

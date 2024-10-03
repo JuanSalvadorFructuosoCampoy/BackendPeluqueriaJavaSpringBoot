@@ -32,12 +32,15 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     public Producto save(Producto producto) {
+        System.out.println(producto);
+        System.out.println("El ID:" + producto.getId());
         if (producto.getId() == null) {
             String idNuevo = productoRepository.findMaxId();
             int nuevoIdNumerico = parseInt(idNuevo.substring(1)) + 1;
             String nuevoId = String.format("P%04d", nuevoIdNumerico);
             producto.setId(nuevoId);
-        } else {
+        }
+        if(productoRepository.findMaxId() == null){
             producto.setId("P0001");
         }
 
