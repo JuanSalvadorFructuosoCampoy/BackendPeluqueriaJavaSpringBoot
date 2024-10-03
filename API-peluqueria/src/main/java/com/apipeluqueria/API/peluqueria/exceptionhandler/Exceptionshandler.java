@@ -34,8 +34,15 @@ public class Exceptionshandler {
     public ResponseEntity handleClienteNoEncontradoException(ClienteNoEncontradoException e){
         return ResponseEntity.status(404).body(Map.of("message", e.getMessage()));
     }
+
     @ExceptionHandler(RegistroClientesNoEncontradoException.class)
     public ResponseEntity handleRegistroClientesNoEncontradoException(RegistroClientesNoEncontradoException e){
         return ResponseEntity.status(404).body(Map.of("message", e.getMessage()));
     }
+
+    @ExceptionHandler(VentaNoEncontradoException.class)
+    public ResponseEntity handleVentaNoEncontradoException(VentaNoEncontradoException e){
+        return ResponseEntity.status(404).body(Map.of("message", e.getMessage()));
+    }
+
 }
