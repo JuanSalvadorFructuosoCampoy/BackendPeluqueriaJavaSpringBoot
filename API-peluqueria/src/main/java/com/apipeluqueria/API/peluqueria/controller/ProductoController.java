@@ -51,7 +51,6 @@ public class ProductoController {
             throw new ProductoNoEncontradoException("No existe el producto con id: " + id);
         }else{
             producto.setId(id);
-            System.out.println(producto);
         }
         return productoService.save(producto);
     }

@@ -40,4 +40,27 @@ public class ServicioController {
     public Servicio crear(@RequestBody Servicio servicio){
         return servicioService.save(servicio);
     }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Editar un servicio por ID", description = "Edita un servicio por ID")
+    public Servicio editar(@PathVariable String id, @RequestBody Servicio servicio) throws ServicioNoEncontradoException {
+        if(servicioService.porId(id).isEmpty()){
+            throw new ServicioNoEncontradoException("No existe el servicio con el id:" + id);
+        }else{
+            servicio.setId(id);
+        }
+        return servicioService.save(servicio);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Eliminar un servicio por ID", description = "Elimina un servicio por ID")
+    public void eliminar(@PathVariable String id) throws ServicioNoEncontradoException {
+        if(servicioService.porId(id).isEmpty()){
+            throw new ServicioNoEncontradoException("No existe el servicio con el id:" + id);
+        }else{
+            servicioService.eliminar(id);
+        }
+    }
 }
