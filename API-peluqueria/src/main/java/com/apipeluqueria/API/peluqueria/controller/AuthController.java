@@ -29,16 +29,17 @@ public class AuthController {
 
     @PostMapping("/auth")
     public AuthenticationResponse createToken(@RequestBody AuthenticationRequest request) throws EmpleadoNoEncontradoException {
-        log.info("createToken(-)");
-        // Authenticate the user
-        userDetailsService.loadUserByUsername(request.getNombre());
-        Empleado empleado = empleadoService.findByNombre(request.getNombre());
-        if(empleado == null){
+        try {
+            // Authenticate the user
+            userDetailsService.loadUserByUsername(request.getNombre());
+
+        } catch (Exception e) {
             throw new EmpleadoNoEncontradoException("Credenciales incorrectas");
         }
+        Empleado empleado = empleadoService.findByNombre(request.getNombre());
+
         //Codificamos la contraseña introducia para compararla con la de la base de datos
         String encodedPassword = PasswordEncoder.encode(request.getPassword());
-
         if(!empleado.getPassword().equals(encodedPassword)){
             throw new EmpleadoNoEncontradoException("Credenciales incorrectas");
         }
