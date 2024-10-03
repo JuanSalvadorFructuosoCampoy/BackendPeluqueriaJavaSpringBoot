@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -41,4 +42,9 @@ public class Venta {
 
     private String tipo;
     private Integer iva;
+
+    @OneToMany(mappedBy = "id",
+    fetch = FetchType.LAZY,
+    cascade = CascadeType.ALL)
+    private List<ProductosVentas> productosVentas;
 }

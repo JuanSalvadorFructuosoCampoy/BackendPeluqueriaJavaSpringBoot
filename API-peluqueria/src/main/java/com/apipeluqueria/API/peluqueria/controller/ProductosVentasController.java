@@ -1,8 +1,6 @@
 package com.apipeluqueria.API.peluqueria.controller;
 
 import com.apipeluqueria.API.peluqueria.entity.ProductosVentas;
-import com.apipeluqueria.API.peluqueria.entity.ProductosVentasId;
-import com.apipeluqueria.API.peluqueria.exception.ProductosVentasNoEncontradoException;
 import com.apipeluqueria.API.peluqueria.service.ProductosVentasService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +33,13 @@ public class ProductosVentasController {
     public List<ProductosVentas> listarPorVenta(@PathVariable Integer ventaId) {
         List<ProductosVentas> productos = productosVentasService.listarPorVenta(ventaId);
         return productosVentasService.listarPorVenta(ventaId);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Crear producto de venta", description = "Crear un producto de venta")
+    public ProductosVentas crear(@RequestBody ProductosVentas productosVentas){
+        System.out.println("PRODUCTO DE LA VENTA: " + productosVentas);
+        return productosVentasService.save(productosVentas);
     }
 }

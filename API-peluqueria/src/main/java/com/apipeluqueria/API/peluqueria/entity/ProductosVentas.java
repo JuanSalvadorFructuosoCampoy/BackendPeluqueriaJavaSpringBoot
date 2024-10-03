@@ -1,5 +1,6 @@
 package com.apipeluqueria.API.peluqueria.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,5 +25,10 @@ public class ProductosVentas {
     private Integer idCliente;
     private Integer cantidad;
     private float precio;
+
+    @ManyToOne
+    @JoinColumn(name = "id")
+    @JsonIgnore
+    private Venta venta;
 
 }
