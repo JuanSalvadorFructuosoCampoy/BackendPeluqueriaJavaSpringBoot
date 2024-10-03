@@ -1,6 +1,7 @@
 package com.apipeluqueria.API.peluqueria.service;
 
 import com.apipeluqueria.API.peluqueria.entity.Servicio;
+import com.apipeluqueria.API.peluqueria.exception.ServicioNoEncontradoException;
 import com.apipeluqueria.API.peluqueria.repository.ServicioRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,11 +26,15 @@ public class ServicioServiceImpl implements ServicioService{
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Servicio> porId(String id) {
+    public Optional<Servicio> porId(String id) throws ServicioNoEncontradoException {
+        if(servicioRepository.findById(id) == null){
+            throw new ServicioNoEncontradoException("No existe el servicio con id: " + id);
+        }
         return servicioRepository.findById(id);
     }
 
     @Override
+    @Transactional
     public Servicio save(Servicio servicio) {
         if(servicio.getId() == null){
             String idNuevo = servicioRepository.findMaxId();
@@ -44,7 +49,10 @@ public class ServicioServiceImpl implements ServicioService{
     }
 
     @Override
-    public void eliminar(String id) {
+    public void eliminar(String id) throws ServicioNoEncontradoException {
+        if(servicioRepository.findById(id) == null){
+            throw new ServicioNoEncontradoException("No existe el servicio con id: " + id);
+        }
         servicioRepository.deleteById(id);
     }
 }

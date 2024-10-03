@@ -1,5 +1,6 @@
 package com.apipeluqueria.API.peluqueria.exceptionhandler;
 
+import com.apipeluqueria.API.peluqueria.exception.AgendaNoEncontradoException;
 import com.apipeluqueria.API.peluqueria.exception.EmpleadoNoEncontradoException;
 import com.apipeluqueria.API.peluqueria.exception.ProductoNoEncontradoException;
 import com.apipeluqueria.API.peluqueria.exception.ServicioNoEncontradoException;
@@ -24,6 +25,11 @@ public class Exceptionshandler {
 
     @ExceptionHandler(ServicioNoEncontradoException.class)
     public ResponseEntity handleServicioNoEncontradoException(ServicioNoEncontradoException e){
+        return ResponseEntity.status(404).body(Map.of("message", e.getMessage()));
+    }
+
+    @ExceptionHandler(AgendaNoEncontradoException.class)
+    public ResponseEntity handleAgendaNoEncontradoException(AgendaNoEncontradoException e){
         return ResponseEntity.status(404).body(Map.of("message", e.getMessage()));
     }
 }

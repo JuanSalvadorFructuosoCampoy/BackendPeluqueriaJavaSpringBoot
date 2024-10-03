@@ -2,6 +2,7 @@ package com.apipeluqueria.API.peluqueria.controller;
 
 import com.apipeluqueria.API.peluqueria.encoder.PasswordEncoder;
 import com.apipeluqueria.API.peluqueria.entity.Empleado;
+import com.apipeluqueria.API.peluqueria.exception.AgendaNoEncontradoException;
 import com.apipeluqueria.API.peluqueria.exception.EmpleadoNoEncontradoException;
 import com.apipeluqueria.API.peluqueria.service.EmpleadoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,28 +50,20 @@ public class EmpleadoController {
     public Empleado editar(@PathVariable Integer id, @RequestBody Empleado empleado) throws EmpleadoNoEncontradoException {
         if(empleadoService.porId(id).isEmpty()) {
             throw new EmpleadoNoEncontradoException("No existe el empleado con id: " + id);
-        }else{
-            Empleado empleadoDatabase = empleadoService.porId(id).get();
-            if(empleado.getPassword() == null) {
-                empleado.setPassword(empleadoDatabase.getPassword());
-            }else{
-                empleado.setPassword(PasswordEncoder.encode(empleado.getPassword()));
-            }
-
-            if(empleado.getActivo() == null){
-                empleado.setActivo(empleadoDatabase.getActivo());
-            }
-            empleado.setToken(empleadoDatabase.getToken());
-            empleado.setId(id);
-            System.out.println(empleado);
         }
+        empleado.setId(id);
         return empleadoService.save(empleado);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Eliminar un empleado por ID", description = "Elimina un empleado por ID")
-    public void eliminar(@PathVariable int id){
+    public void eliminar(@PathVariable int id) throws EmpleadoNoEncontradoException {
+        if(empleadoService.porId(id).isEmpty()) {
+            throw new EmpleadoNoEncontradoException("No existe el empleado con id: " + id);
+        }else{
+            empleadoService.eliminar(id);
+        }
         empleadoService.eliminar(id);
     }
 

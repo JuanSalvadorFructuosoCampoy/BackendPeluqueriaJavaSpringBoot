@@ -1,6 +1,7 @@
 package com.apipeluqueria.API.peluqueria.service;
 
 import com.apipeluqueria.API.peluqueria.entity.Producto;
+import com.apipeluqueria.API.peluqueria.exception.ProductoNoEncontradoException;
 import com.apipeluqueria.API.peluqueria.repository.ProductoRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
@@ -26,11 +27,15 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    public Optional<Producto> porId(String id) {
+    public Optional<Producto> porId(String id) throws ProductoNoEncontradoException {
+        if(productoRepository.findById(id) == null){
+            throw new ProductoNoEncontradoException("No existe el producto con id: " + id);
+        }
         return productoRepository.findById(id);
     }
 
     @Override
+    @Transactional
     public Producto save(Producto producto) {
         System.out.println(producto);
         System.out.println("El ID:" + producto.getId());
@@ -48,7 +53,10 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    public void eliminar(String id) {
+    public void eliminar(String id) throws ProductoNoEncontradoException {
+        if(productoRepository.findById(id) == null){
+            throw new ProductoNoEncontradoException("No existe el producto con id: " + id);
+        }
         productoRepository.deleteById(id);
     }
 }
