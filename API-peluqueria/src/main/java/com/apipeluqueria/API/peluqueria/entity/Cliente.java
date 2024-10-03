@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -24,9 +26,9 @@ public class Cliente {
     private Integer telefono;
     private String direccion;
 
-//    @OneToMany(mappedBy = "idCliente",
-//    fetch = FetchType.LAZY,
-//    cascade = CascadeType.ALL)
-//    @JsonIgnore
-//    private List<RegistroClientes> registroClientes;
+    @OneToMany(mappedBy = "cliente",
+    fetch = FetchType.LAZY,
+    cascade = CascadeType.ALL)
+    private List<RegistroClientes> registroClientes;
+
 }

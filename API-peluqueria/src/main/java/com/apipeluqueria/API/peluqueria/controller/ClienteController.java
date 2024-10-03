@@ -1,6 +1,5 @@
 package com.apipeluqueria.API.peluqueria.controller;
 
-import com.apipeluqueria.API.peluqueria.encoder.PasswordEncoder;
 import com.apipeluqueria.API.peluqueria.entity.Cliente;
 import com.apipeluqueria.API.peluqueria.exception.ClienteNoEncontradoException;
 import com.apipeluqueria.API.peluqueria.service.ClienteService;
