@@ -20,6 +20,6 @@ public class Empleado {
     private String apellido2;
     private String password;
     private String token;
-    private int activo;
+    private Integer activo;
     private String rol;
 }

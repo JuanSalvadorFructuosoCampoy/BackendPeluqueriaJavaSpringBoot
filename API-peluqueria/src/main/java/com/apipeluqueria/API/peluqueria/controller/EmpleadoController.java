@@ -46,12 +46,23 @@ public class EmpleadoController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Editar un empleado por ID", description = "Edita un empleado por ID")
-    public Empleado editar(@PathVariable Integer id, Empleado empleado) throws EmpleadoNoEncontradoException {
+    public Empleado editar(@PathVariable Integer id, @RequestBody Empleado empleado) throws EmpleadoNoEncontradoException {
         if(empleadoService.porId(id).isEmpty()) {
             throw new EmpleadoNoEncontradoException("No existe el empleado con id: " + id);
         }else{
+            Empleado empleadoDatabase = empleadoService.porId(id).get();
+            if(empleado.getPassword() == null) {
+                empleado.setPassword(empleadoDatabase.getPassword());
+            }else{
+                empleado.setPassword(PasswordEncoder.encode(empleado.getPassword()));
+            }
+
+            if(empleado.getActivo() == null){
+                empleado.setActivo(empleadoDatabase.getActivo());
+            }
+            empleado.setToken(empleadoDatabase.getToken());
             empleado.setId(id);
-            empleado.setPassword(PasswordEncoder.encode(empleado.getPassword()));
+            System.out.println(empleado);
         }
         return empleadoService.save(empleado);
     }
