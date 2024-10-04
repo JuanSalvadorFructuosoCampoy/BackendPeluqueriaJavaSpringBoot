@@ -41,10 +41,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
             Empleado empleadoDatabase = empleadoRepository.findById(empleado.getId()).get();
             if(empleado.getPassword() == null) {
                 empleado.setPassword(empleadoDatabase.getPassword());
-            }else{
-                empleado.setPassword(PasswordEncoder.encode(empleado.getPassword()));
             }
-
             if(empleado.getActivo() == null){
                 empleado.setActivo(empleadoDatabase.getActivo());
             }

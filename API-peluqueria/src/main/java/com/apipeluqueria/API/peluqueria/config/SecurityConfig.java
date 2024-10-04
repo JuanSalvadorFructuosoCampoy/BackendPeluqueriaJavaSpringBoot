@@ -12,6 +12,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -31,6 +36,13 @@ public class SecurityConfig {
         log.info("securityFilterChain(-)");
 
         http.csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(request -> {
+                    var corsConfiguration = new CorsConfiguration();
+                    corsConfiguration.setAllowedOrigins(List.of("*"));
+                    corsConfiguration.setAllowedMethods(List.of("*"));
+                    corsConfiguration.setAllowedHeaders(List.of("*"));
+                    return corsConfiguration;
+                })) //Para evitar problemas de CORS
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth").permitAll()
                         .anyRequest().authenticated()
