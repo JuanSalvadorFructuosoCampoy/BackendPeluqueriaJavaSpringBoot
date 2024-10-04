@@ -1,5 +1,6 @@
 package com.apipeluqueria.API.peluqueria.controller;
 
+import com.apipeluqueria.API.peluqueria.dto.CierreCajaDTO;
 import com.apipeluqueria.API.peluqueria.entity.Venta;
 import com.apipeluqueria.API.peluqueria.exception.VentaNoEncontradoException;
 import com.apipeluqueria.API.peluqueria.service.VentaService;
@@ -33,6 +34,13 @@ public class VentaController {
     @Operation(summary = "Obtener una venta por ID", description = "Obtiene una venta por ID")
     public Venta porId(@PathVariable Integer id) throws VentaNoEncontradoException {
         return ventaService.porId(id).orElseThrow(() -> new VentaNoEncontradoException("No existe la venta con el id:" + id));
+    }
+
+    @GetMapping("/cierreCaja")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Obtener cierre de caja", description = "Obtiene el cierre de caja")
+    public List<CierreCajaDTO> cierreCaja(){
+        return ventaService.findVentasAgrupadasPorFecha();
     }
 
     @PostMapping

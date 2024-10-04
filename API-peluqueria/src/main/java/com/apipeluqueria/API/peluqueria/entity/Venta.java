@@ -1,5 +1,6 @@
 package com.apipeluqueria.API.peluqueria.entity;
 
+import com.apipeluqueria.API.peluqueria.dto.CierreCajaDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,18 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @Entity
+@SqlResultSetMapping(
+        name = "CierreCajaDTOMapping",
+        classes = @ConstructorResult(
+                targetClass = CierreCajaDTO.class,
+                columns = {
+                        @ColumnResult(name = "fecha", type = Date.class),
+                        @ColumnResult(name = "totalTarjeta", type = Float.class),
+                        @ColumnResult(name = "totalEfectivo", type = Float.class),
+                        @ColumnResult(name = "total", type = Float.class)
+                }
+        )
+)
 @Table(name = "ventas")
 public class Venta {
     @Id

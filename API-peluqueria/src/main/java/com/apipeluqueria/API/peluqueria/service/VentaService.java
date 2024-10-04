@@ -1,5 +1,6 @@
 package com.apipeluqueria.API.peluqueria.service;
 
+import com.apipeluqueria.API.peluqueria.dto.CierreCajaDTO;
 import com.apipeluqueria.API.peluqueria.entity.Venta;
 import com.apipeluqueria.API.peluqueria.exception.VentaNoEncontradoException;
 
@@ -14,4 +15,6 @@ public interface VentaService {
     Venta save(Venta venta);
 
     void eliminar(Integer id) throws VentaNoEncontradoException;
+
+    List<CierreCajaDTO> findVentasAgrupadasPorFecha();
 }
